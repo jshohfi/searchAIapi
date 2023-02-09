@@ -1,0 +1,4 @@
+node_modules
+.env
+NodeJsStart.txt
+postman-screenshot.png
