@@ -2,3 +2,6 @@ node_modules
 .env
 NodeJsStart.txt
 postman-screenshot.png
+postman-screenshot-02.png
+postman-render-screenshot.png
+localhost-render-screenshot.png
