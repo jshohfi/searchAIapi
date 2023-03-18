@@ -106,5 +106,5 @@ app.post('/', async (req, res) => {
 // });
 
 app.listen(44444, () => {
-    console.log('ChatMenuApi listening on port 44444');
+    console.log('askAIapi listening on port 44444');
 });
