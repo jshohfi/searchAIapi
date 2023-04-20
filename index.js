@@ -32,7 +32,8 @@ app.post('/', async (req, res) => {
     // console.log('prompt=' + prompt);
 
     // +jls+ 19-Apr-2023 uncomment; some bots have docs
-    // const chatbot = req.body.chatbot;
+    const chatbot = req.body.chatbot;
+    console.log('chatbot=' + chatbot);
     // console.log('chatbot=' + chatbot + 
     //   chatbot=='chatbot_perception'? ' Hey L00k!' : '');
     
