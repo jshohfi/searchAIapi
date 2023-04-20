@@ -32,9 +32,9 @@ app.post('/', async (req, res) => {
     // console.log('prompt=' + prompt);
 
     // +jls+ 19-Apr-2023 uncomment; some bots have docs
-    const chatbot = req.body.chatbot;
-    console.log('chatbot=' + chatbot + 
-      chatbot=='chatbot_perception'? ' Hey L00k!' : '');
+    // const chatbot = req.body.chatbot;
+    // console.log('chatbot=' + chatbot + 
+    //   chatbot=='chatbot_perception'? ' Hey L00k!' : '');
     
     // +jls+ 1-Apr-2023 ChatGPT with conversational memory
     const response = await openai.createChatCompletion({
