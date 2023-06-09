@@ -31,11 +31,13 @@ app.post('/', async (req, res) => {
     const prompt = req.body.prompt;
     // console.log('prompt=' + prompt);
 
-    // +jls+ 19-Apr-2023 uncomment; some bots have docs
+    // +jls+ 19-Apr-2023 
     const chatbot = req.body.chatbot;
     console.log('chatbot=' + chatbot);
-    // console.log('chatbot=' + chatbot + 
-    //   chatbot=='chatbot_perception'? ' Hey L00k!' : '');
+
+    // +jls+ 9-June-2023 some bots use Pinecone
+    const namespace = req.body.namespace;
+    console.log('namespace=' + namespace);
     
     // +jls+ 1-Apr-2023 ChatGPT with conversational memory
     const response = await openai.createChatCompletion({
