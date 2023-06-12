@@ -28,7 +28,10 @@ app.get('/', async (req, res) => {
 app.post('/', async (req, res) => {
   try {
     const model = "gpt-3.5-turbo";
-    const prompt = req.body.prompt;
+
+    // +jls+ 12-June-2023 change "prompt" to "messages"
+    const messages = req.body.messages;
+    // const prompt = req.body.prompt;
     // console.log('prompt=' + prompt);
 
     // +jls+ 19-Apr-2023 
@@ -39,11 +42,17 @@ app.post('/', async (req, res) => {
     const namespace = req.body.namespace;
     console.log('namespace=' + namespace);
     
-    // +jls+ 1-Apr-2023 ChatGPT with conversational memory
+
+    // +jls+ 12-June-2023 change "prompt" to "messages"
     const response = await openai.createChatCompletion({
       model: model,
-      messages: JSON.parse(prompt),
+      messages: JSON.parse(messages),
     });
+    // +jls+ 1-Apr-2023 ChatGPT with conversational memory
+    // const response = await openai.createChatCompletion({
+    //   model: model,
+    //   messages: JSON.parse(prompt),
+    // });
     // +jls+ 16-Mar-2023 phase 1: simplest use of ChatGPT (gpt-3.5-turbo)
     // +jls+ evidently a tick-enclosed ${x} substitutes x's value 
     // const response = await openai.createChatCompletion({
