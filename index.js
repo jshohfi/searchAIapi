@@ -9,8 +9,10 @@ const app = express();
 app.use(bodyParser.json());
 app.use(cors());
 
+
+// +jls+ 14-June-2023 rename API_TOKEN to OPENAI_API_KEY
 const config = new Configuration({
-    apiKey: process.env.API_TOKEN
+  apiKey: process.env.OPENAI_API_KEY
 });
 
 const openai = new OpenAIApi(config);
@@ -18,7 +20,7 @@ const openai = new OpenAIApi(config);
 // +jls+ added per ChatBotJS/.../server.js 
 app.get('/', async (req, res) => {
   res.status(200).send({
-    message: 'Hello from ChatMenuApi'
+    message: 'Hello from searchAIapi'
   })
 })
 
