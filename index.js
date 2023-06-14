@@ -49,7 +49,7 @@ app.post('/', async (req, res) => {
     //   (ideally each will include a hyperlink to the doc),  
     //   and append them to messages[]'s final "user" element.
     const uniprompt = req.body.uniprompt;
-    console.log('uniprompt=' + uniprompt);
+    // console.log('uniprompt=' + uniprompt);
     if (namespace != 'none') {
       // *** DO THE STUFF NOTED ABOVE ***
       // something like this?? maybe??
