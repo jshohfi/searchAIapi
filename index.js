@@ -41,7 +41,28 @@ app.post('/', async (req, res) => {
     // +jls+ 9-June-2023 some bots use Pinecone
     const namespace = req.body.namespace;
     console.log('namespace=' + namespace);
-    
+
+    // +jls+ 13-June-2023 if docs to search to get citations
+    // - submit the value of uniprompt, received from searchAI, 
+    //   to openAI's text-embedding-ada-002 to get its vectors.
+    // - search Pinecone to retrieve relevant doc excerpts
+    //   (ideally each will include a hyperlink to the doc),  
+    //   and append them to messages[]'s final "user" element.
+    const uniprompt = req.body.uniprompt;
+    console.log('uniprompt=' + uniprompt);
+    if (namespace != 'none') {
+      // *** DO THE STUFF NOTED ABOVE ***
+      // something like this?? maybe??
+      // openai = new OpenAIApi(this.configuration)
+      // const parameters = {
+      //   model: 'text-embedding-ada-002',
+      //   input: uniprompt
+      // }
+      // Make the embedding request and return the result
+      // const resp = await openai.createEmbedding(parameters)
+      // const embeddings = embeddings?.data.data[0].embedding
+      // *** DO THE STUFF NOTED ABOVE ***
+    }
 
     // +jls+ 12-June-2023 change "prompt" to "messages"
     const response = await openai.createChatCompletion({
