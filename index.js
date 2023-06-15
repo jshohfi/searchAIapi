@@ -24,7 +24,6 @@ const config = new Configuration({
 
 const openai = new OpenAIApi(config);
 
-
 // +jls+ 15-June-2023 initial test Langchain Pinecone
 // **************************************************
 // define initPinecone function to return pinecone
@@ -41,38 +40,7 @@ async function initPinecone() {
     throw new Error('Failed to initialize Pinecone Client');
   }
 }
-
-// can't use await outside of async function
-// invoke the function above that returns pinecone
-const pinecone = initPinecone();
-// const pinecone = await initPinecone();
-
-// get the vectors for this message
-const embeddings = new OpenAIEmbeddings({
-    openAIApiKey: OPENAI_API_KEY,
-});
-
-// can't use await outside of async function
-const embeddedQuery = embeddings.embedQuery(uniprompt);
-// const embeddedQuery = await embeddings.embedQuery(uniprompt);
-
-const index = pinecone.Index(PINECONE_INDEX_NAME);
-const queryRequest = {
-    "topK": 3,
-    "vector": embeddedQuery,
-    "includeMetadata": true,
-    "includeValues": true,
-    "namespace": namespace
-}
-
-// can't use await outside of async function
-// Query the index and return multi-line response
-const queryResponse = index.query({queryRequest});
-// const queryResponse = await index.query({queryRequest});
-console.log("queryResponse=" + queryResponse);
-return (queryResponse);
 // **************************************************
-
 
 // +jls+ added per ChatBotJS/.../server.js 
 app.get('/', async (req, res) => {
@@ -111,15 +79,38 @@ app.post('/', async (req, res) => {
     // console.log('uniprompt=' + uniprompt);
     if (namespace != 'none') {
       // *** DO THE STUFF NOTED ABOVE ***
-      // something like this?? maybe??
-      // openai = new OpenAIApi(this.configuration)
-      // const parameters = {
-      //   model: 'text-embedding-ada-002',
-      //   input: uniprompt
-      // }
-      // Make the embedding request and return the result
-      // const resp = await openai.createEmbedding(parameters)
-      // const embeddings = embeddings?.data.data[0].embedding
+      // +jls+ 15-June-2023 initial test Langchain Pinecone
+      // **************************************************
+      // can't use await outside of async function
+      // invoke the new function defined above that returns pinecone
+      const pinecone = initPinecone();
+      // const pinecone = await initPinecone();
+
+      // get the vectors for this message
+      const embeddings = new OpenAIEmbeddings({
+          openAIApiKey: OPENAI_API_KEY,
+      });
+
+      // can't use await outside of async function
+      const embeddedQuery = embeddings.embedQuery(uniprompt);
+      // const embeddedQuery = await embeddings.embedQuery(uniprompt);
+
+      const index = pinecone.Index(PINECONE_INDEX_NAME);
+      const queryRequest = {
+          "topK": 3,
+          "vector": embeddedQuery,
+          "includeMetadata": true,
+          "includeValues": true,
+          "namespace": namespace
+      }
+
+      // can't use await outside of async function
+      // Query the index and return multi-line response
+      const queryResponse = index.query({queryRequest});
+      // const queryResponse = await index.query({queryRequest});
+      console.log("queryResponse=" + queryResponse);
+      // return (queryResponse);
+      // **************************************************
       // *** DO THE STUFF NOTED ABOVE ***
     }
 
