@@ -1,9 +1,9 @@
-import { PineconeClient } from '@pinecone-database/pinecone';
-import { OpenAIEmbeddings } from 'langchain/embeddings/openai';
 const OPENAI_API_KEY = process.env.OPENAI_API_KEY ?? '';
 const PINECONE_API_KEY = process.env.PINECONE_API_KEY ?? '';
 const PINECONE_ENVIRONMENT = process.env.PINECONE_ENVIRONMENT ?? '';
 const PINECONE_INDEX_NAME = process.env.PINECONE_INDEX_NAME ?? '';
+const PineconeClient = require('@pinecone-database/pinecone').PineconeClient;
+const OpenAIEmbeddings = require('langchain/embeddings/openai').OpenAIEmbeddings;
 
 const {Configuration, OpenAIApi} = require('openai');
 const express = require('express');
