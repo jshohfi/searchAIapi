@@ -42,6 +42,36 @@ async function initPinecone() {
 }
 // **************************************************
 
+// +jls+ 15-June-2023 initial test Langchain Pinecone
+// **************************************************
+// define queryPinecone function for initial testing
+async function queryPinecone() {
+    // invoke the new function defined above that returns pinecone
+    const pinecone = await initPinecone();
+    // get the vectors for this message
+    const embeddings = new OpenAIEmbeddings({
+        openAIApiKey: OPENAI_API_KEY,
+    });
+    const embeddedQuery = await embeddings.embedQuery(uniprompt);
+    const index = pinecone.Index(PINECONE_INDEX_NAME);
+    const queryRequest = {
+        "topK": 3,
+        "vector": embeddedQuery,
+        "includeMetadata": true,
+        "includeValues": true,
+        "namespace": namespace
+    }
+    // Query the index and return multi-line response
+    const queryResponse = await index.query({queryRequest});
+    console.log("queryResponse=" + queryResponse);
+    return (queryResponse);
+    // **************************************************
+    // *** DO THE STUFF NOTED ABOVE ***
+
+}  
+// **************************************************
+
+
 // +jls+ added per ChatBotJS/.../server.js 
 app.get('/', async (req, res) => {
   res.status(200).send({
@@ -75,43 +105,14 @@ app.post('/', async (req, res) => {
     // - search Pinecone to retrieve relevant doc excerpts
     //   (ideally each will include a hyperlink to the doc),  
     //   and append them to messages[]'s final "user" element.
+
     const uniprompt = req.body.uniprompt;
     // console.log('uniprompt=' + uniprompt);
+
     if (namespace != 'none') {
-      // *** DO THE STUFF NOTED ABOVE ***
       // +jls+ 15-June-2023 initial test Langchain Pinecone
-      // **************************************************
-      // can't use await outside of async function
-      // invoke the new function defined above that returns pinecone
-      const pinecone = initPinecone();
-      // const pinecone = await initPinecone();
-
-      // get the vectors for this message
-      const embeddings = new OpenAIEmbeddings({
-          openAIApiKey: OPENAI_API_KEY,
-      });
-
-      // can't use await outside of async function
-      const embeddedQuery = embeddings.embedQuery(uniprompt);
-      // const embeddedQuery = await embeddings.embedQuery(uniprompt);
-
-      const index = pinecone.Index(PINECONE_INDEX_NAME);
-      const queryRequest = {
-          "topK": 3,
-          "vector": embeddedQuery,
-          "includeMetadata": true,
-          "includeValues": true,
-          "namespace": namespace
-      }
-
-      // can't use await outside of async function
-      // Query the index and return multi-line response
-      const queryResponse = index.query({queryRequest});
-      // const queryResponse = await index.query({queryRequest});
-      console.log("queryResponse=" + queryResponse);
-      // return (queryResponse);
-      // **************************************************
-      // *** DO THE STUFF NOTED ABOVE ***
+      // invoke the nested functions defined above
+      const response = await queryPinecone();
     }
 
     // +jls+ 12-June-2023 change "prompt" to "messages"
