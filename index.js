@@ -24,6 +24,7 @@ const config = new Configuration({
 
 const openai = new OpenAIApi(config);
 
+
 // +jls+ 15-June-2023 initial test Langchain Pinecone
 // **************************************************
 // define initPinecone function to return pinecone
@@ -45,11 +46,16 @@ async function initPinecone() {
 // invoke the function above that returns pinecone
 const pinecone = initPinecone();
 // const pinecone = await initPinecone();
+
 // get the vectors for this message
 const embeddings = new OpenAIEmbeddings({
     openAIApiKey: OPENAI_API_KEY,
 });
-const embeddedQuery = await embeddings.embedQuery(uniprompt);
+
+// can't use await outside of async function
+const embeddedQuery = embeddings.embedQuery(uniprompt);
+// const embeddedQuery = await embeddings.embedQuery(uniprompt);
+
 const index = pinecone.Index(PINECONE_INDEX_NAME);
 const queryRequest = {
     "topK": 3,
@@ -58,11 +64,15 @@ const queryRequest = {
     "includeValues": true,
     "namespace": namespace
 }
+
+// can't use await outside of async function
 // Query the index and return multi-line response
-const queryResponse = await index.query({queryRequest});
+const queryResponse = index.query({queryRequest});
+// const queryResponse = await index.query({queryRequest});
 console.log("queryResponse=" + queryResponse);
 return (queryResponse);
 // **************************************************
+
 
 // +jls+ added per ChatBotJS/.../server.js 
 app.get('/', async (req, res) => {
