@@ -40,8 +40,11 @@ async function initPinecone() {
     throw new Error('Failed to initialize Pinecone Client');
   }
 }
+
+// can't use await outside of async function
 // invoke the function above that returns pinecone
-const pinecone = await initPinecone();
+const pinecone = initPinecone();
+// const pinecone = await initPinecone();
 // get the vectors for this message
 const embeddings = new OpenAIEmbeddings({
     openAIApiKey: OPENAI_API_KEY,
