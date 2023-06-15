@@ -45,21 +45,21 @@ async function initPinecone() {
 // +jls+ 15-June-2023 initial test Langchain Pinecone
 // **************************************************
 // define queryPinecone function for initial testing
-async function queryPinecone() {
+async function queryPinecone(uniPrompt, nameSpace) {
     // invoke the new function defined above that returns pinecone
     const pinecone = await initPinecone();
     // get the vectors for this message
     const embeddings = new OpenAIEmbeddings({
         openAIApiKey: OPENAI_API_KEY,
     });
-    const embeddedQuery = await embeddings.embedQuery(uniprompt);
+    const embeddedQuery = await embeddings.embedQuery(uniPrompt);
     const index = pinecone.Index(PINECONE_INDEX_NAME);
     const queryRequest = {
         "topK": 3,
         "vector": embeddedQuery,
         "includeMetadata": true,
         "includeValues": true,
-        "namespace": namespace
+        "namespace": nameSpace
     }
     // Query the index and return multi-line response
     const queryResponse = await index.query({queryRequest});
@@ -112,7 +112,7 @@ app.post('/', async (req, res) => {
     if (namespace != 'none') {
       // +jls+ 15-June-2023 initial test Langchain Pinecone
       // invoke the nested functions defined above
-      const response = await queryPinecone();
+      const response = await queryPinecone(uniprompt, namespace);
     }
 
     // +jls+ 12-June-2023 change "prompt" to "messages"
