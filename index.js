@@ -1,3 +1,10 @@
+import { PineconeClient } from '@pinecone-database/pinecone';
+import { OpenAIEmbeddings } from 'langchain/embeddings/openai';
+const OPENAI_API_KEY = process.env.OPENAI_API_KEY ?? '';
+const PINECONE_API_KEY = process.env.PINECONE_API_KEY ?? '';
+const PINECONE_ENVIRONMENT = process.env.PINECONE_ENVIRONMENT ?? '';
+const PINECONE_INDEX_NAME = process.env.PINECONE_INDEX_NAME ?? '';
+
 const {Configuration, OpenAIApi} = require('openai');
 const express = require('express');
 const bodyParser = require('body-parser');
@@ -16,6 +23,43 @@ const config = new Configuration({
 });
 
 const openai = new OpenAIApi(config);
+
+// +jls+ 15-June-2023 initial test Langchain Pinecone
+// **************************************************
+// define initPinecone function to return pinecone
+async function initPinecone() {
+  try {
+    const pinecone = new PineconeClient();
+    await pinecone.init({
+        environment: PINECONE_ENVIRONMENT,
+        apiKey: PINECONE_API_KEY
+    });
+    return pinecone;
+  } catch (error) {
+    console.log('error', error);
+    throw new Error('Failed to initialize Pinecone Client');
+  }
+}
+// invoke the function above that returns pinecone
+const pinecone = await initPinecone();
+// get the vectors for this message
+const embeddings = new OpenAIEmbeddings({
+    openAIApiKey: OPENAI_API_KEY,
+});
+const embeddedQuery = await embeddings.embedQuery(uniprompt);
+const index = pinecone.Index(PINECONE_INDEX_NAME);
+const queryRequest = {
+    "topK": 3,
+    "vector": embeddedQuery,
+    "includeMetadata": true,
+    "includeValues": true,
+    "namespace": namespace
+}
+// Query the index and return multi-line response
+const queryResponse = await index.query({queryRequest});
+console.log("queryResponse=" + queryResponse);
+return (queryResponse);
+// **************************************************
 
 // +jls+ added per ChatBotJS/.../server.js 
 app.get('/', async (req, res) => {
