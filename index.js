@@ -63,11 +63,9 @@ async function queryPinecone(uniPrompt, nameSpace) {
     }
     // Query the index and return multi-line response
     const queryResponse = await index.query({queryRequest});
-    console.log("queryResponse=" + queryResponse);
     return (queryResponse);
     // **************************************************
     // *** DO THE STUFF NOTED ABOVE ***
-
 }  
 // **************************************************
 
@@ -112,7 +110,8 @@ app.post('/', async (req, res) => {
     if (namespace != 'none') {
       // +jls+ 15-June-2023 initial test Langchain Pinecone
       // invoke the nested functions defined above
-      const response = await queryPinecone(uniprompt, namespace);
+      const indexResponse = await queryPinecone(uniprompt, namespace);
+      console.log("indexResponse=" + JSON.stringify(indexResponse));
     }
 
     // +jls+ 12-June-2023 change "prompt" to "messages"
