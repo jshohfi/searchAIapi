@@ -111,7 +111,10 @@ app.post('/', async (req, res) => {
       // +jls+ 15-June-2023 initial test Langchain Pinecone
       // invoke the nested functions defined above
       const indexResponse = await queryPinecone(uniprompt, namespace);
-      console.log("indexResponse=" + JSON.stringify(indexResponse));
+      console.log("indexResponse.matches[0].metadata.text=" + indexResponse.matches[0].metadata.text);
+      console.log("indexResponse.matches[1].metadata.text=" + indexResponse.matches[1].metadata.text);
+      console.log("indexResponse.matches[2].metadata.text=" + indexResponse.matches[2].metadata.text);
+      // console.log("indexResponse=" + JSON.stringify(indexResponse));
     }
 
     // +jls+ 12-June-2023 change "prompt" to "messages"
