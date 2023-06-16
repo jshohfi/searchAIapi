@@ -107,21 +107,38 @@ app.post('/', async (req, res) => {
     const uniprompt = req.body.uniprompt;
     // console.log('uniprompt=' + uniprompt);
 
+    // +jls+ 16-June-2023 JSON.parsed messages array (with retrieved doc excerpts in final "user" element's content if namespace)
+    let chatMessages = [];
+    chatMessages = JSON.parse(messages);
+
     if (namespace != 'none') {
       // +jls+ 15-June-2023 initial test Langchain Pinecone
       // invoke the nested functions defined above
       const indexResponse = await queryPinecone(uniprompt, namespace);
-      console.log("indexResponse.matches[0].metadata.text=" + indexResponse.matches[0].metadata.text);
-      console.log("indexResponse.matches[1].metadata.text=" + indexResponse.matches[1].metadata.text);
-      console.log("indexResponse.matches[2].metadata.text=" + indexResponse.matches[2].metadata.text);
-      // console.log("indexResponse=" + JSON.stringify(indexResponse));
+      // console.log("indexResponse.matches[0].metadata.text=" + indexResponse.matches[0].metadata.text);
+      // console.log("indexResponse.matches[1].metadata.text=" + indexResponse.matches[1].metadata.text);
+      // console.log("indexResponse.matches[2].metadata.text=" + indexResponse.matches[2].metadata.text);
+      // +jls+ 16-June-2023 Append retrieved doc excerpts to final "user" content in messages[] array
+      console.log(JSON.stringify(chatMessages[chatMessages.length - 1]));
+      let currentQuery = chatMessages[chatMessages.length - 1].content;
+      currentQuery += ("\n\nDocuments:\n\n" + 
+        "1. " + indexResponse.matches[0].metadata.text + "\n\n" +
+        "2. " + indexResponse.matches[1].metadata.text + "\n\n" +
+        "3. " + indexResponse.matches[2].metadata.text);
+      chatMessages[chatMessages.length - 1].content = currentQuery;
+      console.log(JSON.stringify(chatMessages[chatMessages.length - 1]));
     }
 
-    // +jls+ 12-June-2023 change "prompt" to "messages"
+    // +jls+ 16-June-2023 chatMessages[] has messages array (with retrieved doc excerpts in final "user" element's content if namespace)
     const response = await openai.createChatCompletion({
       model: model,
-      messages: JSON.parse(messages),
+      messages: chatMessages,
     });
+    // +jls+ 12-June-2023 change "prompt" to "messages"
+    // const response = await openai.createChatCompletion({
+    //   model: model,
+    //   messages: JSON.parse(messages),
+    // });
     // +jls+ 1-Apr-2023 ChatGPT with conversational memory
     // const response = await openai.createChatCompletion({
     //   model: model,
