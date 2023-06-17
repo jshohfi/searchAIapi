@@ -121,11 +121,11 @@ app.post('/', async (req, res) => {
       // +jls+ 16-June-2023 Append retrieved doc excerpts to final "user" content in messages[] array
       console.log(JSON.stringify(chatMessages[chatMessages.length - 1]));
 
-      // +jls+ 17-June-2023 change back to a string, use "\r\n"
-      let docExcerpts = "\r\n\r\nDocuments:"
-        + "\r\n\r\n1. " + indexResponse.matches[0].metadata.text
-        + "\r\n\r\n2. " + indexResponse.matches[1].metadata.text
-        + "\r\n\r\n3. " + indexResponse.matches[2].metadata.text;
+      // +jls+ 17-June-2023 change back to string, just use "\n"
+      let docExcerpts = "\n\nDocuments:"
+        + "\n\n1. " + indexResponse.matches[0].metadata.text
+        + "\n\n2. " + indexResponse.matches[1].metadata.text
+        + "\n\n3. " + indexResponse.matches[2].metadata.text;
       // +jls+ 17-June-2023 change string to a template literal
       // let docExcerpts = `
       // Documents:
