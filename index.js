@@ -108,7 +108,7 @@ app.post('/', async (req, res) => {
     // console.log('uniprompt=' + uniprompt);
 
     // +jls+ 16-June-2023 JSON.parsed messages array (with retrieved doc excerpts in final "user" element's content if namespace)
-    let chatMessages = [];
+      let chatMessages = [];
     chatMessages = JSON.parse(messages);
 
     if (namespace != 'none') {
@@ -120,11 +120,24 @@ app.post('/', async (req, res) => {
       // console.log("indexResponse.matches[2].metadata.text=" + indexResponse.matches[2].metadata.text);
       // +jls+ 16-June-2023 Append retrieved doc excerpts to final "user" content in messages[] array
       console.log(JSON.stringify(chatMessages[chatMessages.length - 1]));
-      let currentQuery = chatMessages[chatMessages.length - 1].content;
-      currentQuery += ("\n\nDocuments:\n\n" + 
-        "1. " + indexResponse.matches[0].metadata.text + "\n\n" +
-        "2. " + indexResponse.matches[1].metadata.text + "\n\n" +
-        "3. " + indexResponse.matches[2].metadata.text);
+
+      // +jls+ 17-June-2023 change string to a template literal
+      let docExcerpts = `
+      Documents:
+
+      1. ${indexResponse.matches[0].metadata.text}
+      
+      2. ${indexResponse.matches[1].metadata.text}
+      
+      3. ${indexResponse.matches[2].metadata.text}`;
+      let currentQuery = chatMessages[chatMessages.length - 1].content 
+        + docExcerpts;
+      // let currentQuery = chatMessages[chatMessages.length - 1].content;
+      // currentQuery += ("\n\nDocuments:\n\n" + 
+      //   "1. " + indexResponse.matches[0].metadata.text + "\n\n" +
+      //   "2. " + indexResponse.matches[1].metadata.text + "\n\n" +
+      //   "3. " + indexResponse.matches[2].metadata.text);
+
       chatMessages[chatMessages.length - 1].content = currentQuery;
       console.log(JSON.stringify(chatMessages[chatMessages.length - 1]));
     }
