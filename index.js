@@ -108,9 +108,10 @@ app.post('/', async (req, res) => {
     // console.log('uniprompt=' + uniprompt);
 
     // +jls+ 16-June-2023 JSON.parsed messages array (with retrieved doc excerpts in final "user" element's content if namespace)
-      let chatMessages = [];
+    let chatMessages = [];
     chatMessages = JSON.parse(messages);
 
+    // +jls+ 17-June-2023 if docs to search to get citations
     if (namespace != 'none') {
       // +jls+ 15-June-2023 initial test Langchain Pinecone
       // invoke the nested functions defined above
@@ -174,9 +175,20 @@ app.post('/', async (req, res) => {
     // console.log('Model=' + model);
     // console.log('AI: ' + response.data.choices[0].message.content.trimStart());
 
+    let botResponse = response.data.choices[0].message.content.trimStart();
+    // +jls+ 17-June-2023 if docs to search to get citations
+    if (namespace != 'none') {
+      botResponse += ('\n\nSource 1: ' + indexResponse.matches[0].metadata.source
+        + '\n\nSource 2: ' + indexResponse.matches[1].metadata.source
+        + '\n\nSource 3: ' + indexResponse.matches[2].metadata.source);
+    }  
     res.status(200).send({
-      bot: response.data.choices[0].message.content.trimStart()
+      bot: botResponse
     });
+    // res.status(200).send({
+    //   bot: response.data.choices[0].message.content.trimStart()
+    // });
+
     // const response = await openai.createCompletion({
     //     model: `${model}`,
     //     prompt: `${prompt}`,
