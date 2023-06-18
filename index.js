@@ -16,6 +16,8 @@ const app = express();
 app.use(bodyParser.json());
 app.use(cors());
 
+// +js+ 17-June-2023 declare global var indexResponse as an object
+var indexResponse = {};
 
 // +jls+ 14-June-2023 rename API_TOKEN to OPENAI_API_KEY
 const config = new Configuration({
@@ -115,7 +117,9 @@ app.post('/', async (req, res) => {
     if (namespace != 'none') {
       // +jls+ 15-June-2023 initial test Langchain Pinecone
       // invoke the nested functions defined above
-      const indexResponse = await queryPinecone(uniprompt, namespace);
+      // +js+ 17-June-2023 declared global var indexResponse
+      indexResponse = await queryPinecone(uniprompt, namespace);
+      // const indexResponse = await queryPinecone(uniprompt, namespace);
       // console.log("indexResponse.matches[0].metadata.text=" + indexResponse.matches[0].metadata.text);
       // console.log("indexResponse.matches[1].metadata.text=" + indexResponse.matches[1].metadata.text);
       // console.log("indexResponse.matches[2].metadata.text=" + indexResponse.matches[2].metadata.text);
