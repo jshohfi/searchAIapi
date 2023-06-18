@@ -182,9 +182,13 @@ app.post('/', async (req, res) => {
     let botResponse = response.data.choices[0].message.content.trimStart();
     // +jls+ 17-June-2023 if docs to search to get citations
     if (namespace != 'none') {
-      botResponse += ('\n\nSource 1: ' + indexResponse.matches[0].metadata.source
-        + '\n\nSource 2: ' + indexResponse.matches[1].metadata.source
-        + '\n\nSource 3: ' + indexResponse.matches[2].metadata.source);
+      botResponse += 
+        ( '\n\nSource 1: ' + indexResponse.matches[0].metadata.text
+        + '\n' + indexResponse.matches[0].metadata.source
+        + '\n\nSource 2: ' + indexResponse.matches[1].metadata.text
+        + '\n' + indexResponse.matches[1].metadata.source
+        + '\n\nSource 3: ' + indexResponse.matches[2].metadata.text
+        + '\n' + indexResponse.matches[2].metadata.source);
     }  
     res.status(200).send({
       bot: botResponse
