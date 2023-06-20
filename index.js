@@ -5,9 +5,6 @@ const PINECONE_INDEX_NAME = process.env.PINECONE_INDEX_NAME ?? '';
 const PineconeClient = require('@pinecone-database/pinecone').PineconeClient;
 const OpenAIEmbeddings = require('langchain/embeddings/openai').OpenAIEmbeddings;
 
-// +jls+ 20-June-2023 to parse file spec for docExdocexccerpt*
-const path = require('path');
-
 const {Configuration, OpenAIApi} = require('openai');
 const express = require('express');
 const bodyParser = require('body-parser');
@@ -182,15 +179,20 @@ app.post('/', async (req, res) => {
 
     // +jls+ 20-June-2023 only filename.ext (not whole path) in docExcerpt*
     // +jls+ 17-June-2023 if docs to search, process the three citations
-    let fileNameExt, docExcerpt1, docExcerpt2, docExcerpt3 = '';
+    let filePath, fileNameExt, docExcerpt1, docExcerpt2, docExcerpt3 = '';
     if (namespace != 'none') {
-      fileNameExt = path.basename(indexResponse.matches[0].metadata.source);
+      filePath = indexResponse.matches[0].metadata.source
+      fileNameExt = filePath.substring(filePath.lastIndexOf('\\') + 1);
       docExcerpt1 = 'Source 1: ' + indexResponse.matches[0].metadata.text 
       + '\n' + fileNameExt;
-      fileNameExt = path.basename(indexResponse.matches[1].metadata.source);
+      console.log("1st FileNameExt:", fileNameExt);
+      filePath = indexResponse.matches[1].metadata.source
+      fileNameExt = filePath.substring(filePath.lastIndexOf('\\') + 1);
       docExcerpt2 = 'Source 2: ' + indexResponse.matches[1].metadata.text 
       + '\n' + fileNameExt;
-      fileNameExt = path.basename(indexResponse.matches[2].metadata.source);
+      console.log("2nd FileNameExt:", fileNameExt);
+      filePath = indexResponse.matches[2].metadata.source
+      fileNameExt = filePath.substring(filePath.lastIndexOf('\\') + 1);
       docExcerpt3 = 'Source 3: ' + indexResponse.matches[2].metadata.text 
       + '\n' + fileNameExt;
       console.log("3rd FileNameExt:", fileNameExt);
