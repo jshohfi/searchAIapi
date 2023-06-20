@@ -93,11 +93,11 @@ app.post('/', async (req, res) => {
 
     // +jls+ 19-Apr-2023 
     const chatbot = req.body.chatbot;
-    console.log('chatbot=' + chatbot);
+    // console.log('chatbot=' + chatbot);
 
     // +jls+ 9-June-2023 some bots use Pinecone
     const namespace = req.body.namespace;
-    console.log('namespace=' + namespace);
+    // console.log('namespace=' + namespace);
 
     // +jls+ 13-June-2023 if docs to search to get citations
     // - submit the value of uniprompt, received from searchAI, 
@@ -124,7 +124,7 @@ app.post('/', async (req, res) => {
       // console.log("indexResponse.matches[1].metadata.text=" + indexResponse.matches[1].metadata.text);
       // console.log("indexResponse.matches[2].metadata.text=" + indexResponse.matches[2].metadata.text);
       // +jls+ 16-June-2023 Append retrieved doc excerpts to final "user" content in messages[] array
-      console.log(JSON.stringify(chatMessages[chatMessages.length - 1]));
+      // console.log(JSON.stringify(chatMessages[chatMessages.length - 1]));
 
       // +jls+ 19-June-2023 undo this, return excerpts in data.doc1,.doc2,.doc3
       // let docExcerpts = "\n\nDocuments:"
@@ -185,17 +185,17 @@ app.post('/', async (req, res) => {
       fileNameExt = filePath.substring(filePath.lastIndexOf('\\') + 1);
       docExcerpt1 = 'Source 1: ' + indexResponse.matches[0].metadata.text 
       + '\n' + fileNameExt;
-      console.log("1st FileNameExt:", fileNameExt);
+      // console.log("1st FileNameExt:", fileNameExt);
       filePath = indexResponse.matches[1].metadata.source
       fileNameExt = filePath.substring(filePath.lastIndexOf('\\') + 1);
       docExcerpt2 = 'Source 2: ' + indexResponse.matches[1].metadata.text 
       + '\n' + fileNameExt;
-      console.log("2nd FileNameExt:", fileNameExt);
+      // console.log("2nd FileNameExt:", fileNameExt);
       filePath = indexResponse.matches[2].metadata.source
       fileNameExt = filePath.substring(filePath.lastIndexOf('\\') + 1);
       docExcerpt3 = 'Source 3: ' + indexResponse.matches[2].metadata.text 
       + '\n' + fileNameExt;
-      console.log("3rd FileNameExt:", fileNameExt);
+      // console.log("3rd FileNameExt:", fileNameExt);
     }  
 
     res.status(200).send({
