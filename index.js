@@ -126,31 +126,16 @@ app.post('/', async (req, res) => {
       // +jls+ 16-June-2023 Append retrieved doc excerpts to final "user" content in messages[] array
       console.log(JSON.stringify(chatMessages[chatMessages.length - 1]));
 
-      // +jls+ 17-June-2023 change back to string, just use "\n"
-      let docExcerpts = "\n\nDocuments:"
-        + "\n\n1. " + indexResponse.matches[0].metadata.text
-        + "\n\n2. " + indexResponse.matches[1].metadata.text
-        + "\n\n3. " + indexResponse.matches[2].metadata.text;
-      // +jls+ 17-June-2023 change string to a template literal
-      // let docExcerpts = `
-      // Documents:
-      // 
-      // 1. ${indexResponse.matches[0].metadata.text}
-      //
-      // 2. ${indexResponse.matches[1].metadata.text}
-      //
-      // 3. ${indexResponse.matches[2].metadata.text}`;
+      // +jls+ 19-June-2023 undo this, return excerpts in data.doc1,.doc2,.doc3
+      // let docExcerpts = "\n\nDocuments:"
+      //   + "\n\n1. " + indexResponse.matches[0].metadata.text
+      //   + "\n\n2. " + indexResponse.matches[1].metadata.text
+      //   + "\n\n3. " + indexResponse.matches[2].metadata.text;
+      // let currentQuery = chatMessages[chatMessages.length - 1].content 
+      //   + docExcerpts;
+      // chatMessages[chatMessages.length - 1].content = currentQuery;
+      // console.log(JSON.stringify(chatMessages[chatMessages.length - 1]));
 
-      let currentQuery = chatMessages[chatMessages.length - 1].content 
-        + docExcerpts;
-      // let currentQuery = chatMessages[chatMessages.length - 1].content;
-      // currentQuery += ("\n\nDocuments:\n\n" + 
-      //   "1. " + indexResponse.matches[0].metadata.text + "\n\n" +
-      //   "2. " + indexResponse.matches[1].metadata.text + "\n\n" +
-      //   "3. " + indexResponse.matches[2].metadata.text);
-
-      chatMessages[chatMessages.length - 1].content = currentQuery;
-      console.log(JSON.stringify(chatMessages[chatMessages.length - 1]));
     }
 
     // +jls+ 16-June-2023 chatMessages[] has messages array (with retrieved doc excerpts in final "user" element's content if namespace)
@@ -180,18 +165,34 @@ app.post('/', async (req, res) => {
     // console.log('AI: ' + response.data.choices[0].message.content.trimStart());
 
     let botResponse = response.data.choices[0].message.content.trimStart();
-    // +jls+ 17-June-2023 if docs to search to get citations
+
+    // +jls+ 19-June-2023 undo this, return excerpts in data.doc1,.doc2,.doc3
+    // if (namespace != 'none') {
+    //   botResponse += 
+    //     ( '\n\nSource 1: ' + indexResponse.matches[0].metadata.text
+    //     + '\n' + indexResponse.matches[0].metadata.source
+    //     + '\n\nSource 2: ' + indexResponse.matches[1].metadata.text
+    //     + '\n' + indexResponse.matches[1].metadata.source
+    //     + '\n\nSource 3: ' + indexResponse.matches[2].metadata.text
+    //     + '\n' + indexResponse.matches[2].metadata.source);
+    // }  
+
+    // +jls+ 17-June-2023 if docs to search, process the three citations
+    let doc1, doc2, doc3 = '';
     if (namespace != 'none') {
-      botResponse += 
-        ( '\n\nSource 1: ' + indexResponse.matches[0].metadata.text
-        + '\n' + indexResponse.matches[0].metadata.source
-        + '\n\nSource 2: ' + indexResponse.matches[1].metadata.text
-        + '\n' + indexResponse.matches[1].metadata.source
-        + '\n\nSource 3: ' + indexResponse.matches[2].metadata.text
-        + '\n' + indexResponse.matches[2].metadata.source);
+      docExcerpt1 = 'Source 1: ' + indexResponse.matches[0].metadata.text 
+      + '\n' + indexResponse.matches[0].metadata.source;
+      docExcerpt2 = 'Source 2: ' + indexResponse.matches[1].metadata.text 
+      + '\n' + indexResponse.matches[1].metadata.source;;
+      docExcerpt3 = 'Source 3: ' + indexResponse.matches[2].metadata.text 
+      + '\n' + indexResponse.matches[2].metadata.source;;
     }  
+
     res.status(200).send({
-      bot: botResponse
+      bot: botResponse,
+      doc1: docExcerpt1,
+      doc2: docExcerpt2,
+      doc3: docExcerpt3
     });
     // res.status(200).send({
     //   bot: response.data.choices[0].message.content.trimStart()
