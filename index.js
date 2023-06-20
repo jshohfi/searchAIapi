@@ -178,7 +178,7 @@ app.post('/', async (req, res) => {
     // }  
 
     // +jls+ 17-June-2023 if docs to search, process the three citations
-    let doc1, doc2, doc3 = '';
+    let docExcerpt1, docExcerpt2, docExcerpt3 = '';
     if (namespace != 'none') {
       docExcerpt1 = 'Source 1: ' + indexResponse.matches[0].metadata.text 
       + '\n' + indexResponse.matches[0].metadata.source;
