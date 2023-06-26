@@ -177,6 +177,7 @@ app.post('/', async (req, res) => {
     //     + '\n' + indexResponse.matches[2].metadata.source);
     // }  
 
+    // +jls+ 26-June-2023 add dash before filename.ext in docExcerpt*
     // +jls+ 20-June-2023 only filename.ext (not whole path) in docExcerpt*
     // +jls+ 17-June-2023 if docs to search, process the three citations
     let filePath, fileNameExt, docExcerpt1, docExcerpt2, docExcerpt3 = '';
@@ -184,17 +185,17 @@ app.post('/', async (req, res) => {
       filePath = indexResponse.matches[0].metadata.source
       fileNameExt = filePath.substring(filePath.lastIndexOf('\\') + 1);
       docExcerpt1 = 'Source 1: ' + indexResponse.matches[0].metadata.text 
-      + '\n' + fileNameExt;
+      + '\n —' + fileNameExt;
       // console.log("1st FileNameExt:", fileNameExt);
       filePath = indexResponse.matches[1].metadata.source
       fileNameExt = filePath.substring(filePath.lastIndexOf('\\') + 1);
       docExcerpt2 = 'Source 2: ' + indexResponse.matches[1].metadata.text 
-      + '\n' + fileNameExt;
+      + '\n —' + fileNameExt;
       // console.log("2nd FileNameExt:", fileNameExt);
       filePath = indexResponse.matches[2].metadata.source
       fileNameExt = filePath.substring(filePath.lastIndexOf('\\') + 1);
       docExcerpt3 = 'Source 3: ' + indexResponse.matches[2].metadata.text 
-      + '\n' + fileNameExt;
+      + '\n —' + fileNameExt;
       // console.log("3rd FileNameExt:", fileNameExt);
     }  
 
