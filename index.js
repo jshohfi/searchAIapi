@@ -141,11 +141,12 @@ app.post('/', async (req, res) => {
       // console.log(JSON.stringify(chatMessages[chatMessages.length - 1]));
 
     }
-
+    // +jls+ 1-July-2023 set temperature: 0 // range 0 to 1, higher = more creative
     // +jls+ 16-June-2023 chatMessages[] has messages array (with retrieved doc excerpts in final "user" element's content if namespace)
     const response = await openai.createChatCompletion({
       model: model,
       messages: chatMessages,
+      temperature: 0
     });
     // +jls+ 12-June-2023 change "prompt" to "messages"
     // const response = await openai.createChatCompletion({
