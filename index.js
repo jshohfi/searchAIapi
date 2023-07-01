@@ -85,9 +85,10 @@ app.get('/', async (req, res) => {
 app.post('/', async (req, res) => {
   try {
 
-    // +jls+ 30-June-2023 searchAI bots with custom docs pass us the model
-    const model = req.body.model || "gpt-3.5-turbo";
+    // +jls+ 30-June-2023 searchAI bots can optionally post the model ID to us
+    const model = (req.body.model.length !== 0 ? req.body.model : "gpt-3.5-turbo");
     // const model = "gpt-3.5-turbo";
+    // const model = "gpt-4";
 
     // +jls+ 12-June-2023 change "prompt" to "messages"
     const messages = req.body.messages;
