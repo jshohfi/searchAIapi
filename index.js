@@ -84,7 +84,10 @@ app.get('/', async (req, res) => {
 // +jls+ modified per ChatBotJS/.../server.js 
 app.post('/', async (req, res) => {
   try {
-    const model = "gpt-3.5-turbo";
+
+    // +jls+ 30-June-2023 searchAI bots with custom docs pass us the model
+    const model = req.body.model || "gpt-3.5-turbo";
+    // const model = "gpt-3.5-turbo";
 
     // +jls+ 12-June-2023 change "prompt" to "messages"
     const messages = req.body.messages;
