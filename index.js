@@ -85,10 +85,14 @@ app.get('/', async (req, res) => {
 app.post('/', async (req, res) => {
   try {
 
-    // +jls+ 30-June-2023 searchAI bots can optionally post the model ID to us
-    const model = (req.body.model.length !== 0 ? req.body.model : "gpt-3.5-turbo");
-    // const model = "gpt-3.5-turbo";
-    // const model = "gpt-4";
+    // +jls+ 30-June-2023 searchAI individual bots optionally specify a model ID,
+    //    else searchAI/bot-io.services.ts sets default model to gpt-3.5-turbo
+    // +jls+ 4-July-2023 they also optional specify temperature (0 to 2, def .3),
+    //     max_tokens (8192 gpt-4, def 4096), frequency_penalty (-2 to 2, def .3)
+    const model = req.body.model;
+    const max_tokens = Number(req.body.max_tokens);
+    const temperature = Number(req.body.temperature);
+    const frequency_penalty = Number(req.body.frequency_penalty);
 
     // +jls+ 12-June-2023 change "prompt" to "messages"
     const messages = req.body.messages;
@@ -141,12 +145,18 @@ app.post('/', async (req, res) => {
       // console.log(JSON.stringify(chatMessages[chatMessages.length - 1]));
 
     }
-    // +jls+ 1-July-2023 set temperature: 0 // range 0 to 1, higher = more creative
+
+    // +jls+ 30-June-2023 searchAI individual bots optionally specify a model ID,
+    //   else searchAI/bot-io.services.ts sets default model to gpt-3.5-turbo
+    // +jls+ 4-July-2023 they also optional specify temperature (0 to 2, def .3),
+    //   max_tokens (8192 gpt-4, def 4096), frequency_penalty (-2 to 2, def .3)
     // +jls+ 16-June-2023 chatMessages[] has messages array (with retrieved doc excerpts in final "user" element's content if namespace)
     const response = await openai.createChatCompletion({
       model: model,
+      max_tokens: max_tokens,
       messages: chatMessages,
-      temperature: 0
+      temperature: temperature,
+      frequency_penalty: frequency_penalty
     });
     // +jls+ 12-June-2023 change "prompt" to "messages"
     // const response = await openai.createChatCompletion({
