@@ -175,10 +175,12 @@ app.post('/', async (req, res) => {
       try {
 
         // +jls+ 7-July-2023 per https://js.langchain.com/docs/modules/indexes/vector_stores/integrations/pinecone
-        const pineconeIndex = pinecone.Index(PINECONE_INDEX_NAME);
+        const index = pinecone.Index(PINECONE_INDEX_NAME);
         const vectorStore = await PineconeStore.fromExistingIndex(
-          new OpenAIEmbeddings(),
-          { pineconeIndex }
+          index,
+          new OpenAIEmbeddings({}),
+          'text',
+          PINECONE_NAME_SPACE, 
         );
         // const index = pinecone.Index(PINECONE_INDEX_NAME);
         // const vectorStore = await PineconeStore.fromExistingIndex(
