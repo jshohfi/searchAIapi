@@ -116,7 +116,7 @@ app.post('/', async (req, res) => {
 
     // +jls+ 6-July-2023 not sure where or when to invoke this:
     const pinecone = await initPinecone();
-    
+
     // +jls+ 30-June-2023 searchAI individual bots optionally specify a model ID,
     //    else searchAI/bot-io.services.ts sets default model to gpt-3.5-turbo
     // +jls+ 4-July-2023 they also optional specify temperature (0 to 2, def .3),
@@ -173,17 +173,22 @@ app.post('/', async (req, res) => {
       console.log('**historyQA=', historyQA);
 
       try {
-        const index = pinecone.Index(PINECONE_INDEX_NAME);
-    
-        /* create vectorStore*/
+
+        // +jls+ 7-July-2023 per https://js.langchain.com/docs/modules/indexes/vector_stores/integrations/pinecone
+        const pineconeIndex = pinecone.Index(PINECONE_INDEX_NAME);
         const vectorStore = await PineconeStore.fromExistingIndex(
-          new OpenAIEmbeddings({}),
-          {
-            pineconeIndex: index,
-            textKey: 'text',
-            namespace: PINECONE_NAME_SPACE,
-          },
+          new OpenAIEmbeddings(),
+          { pineconeIndex }
         );
+        // const index = pinecone.Index(PINECONE_INDEX_NAME);
+        // const vectorStore = await PineconeStore.fromExistingIndex(
+        //   new OpenAIEmbeddings({}),
+        //   {
+        //     pineconeIndex: index,
+        //     textKey: 'text',
+        //     namespace: PINECONE_NAME_SPACE,
+        //   },
+        // );
     
         // console.log("vectorStore.asRetriever()=" + JSON.stringify(vectorStore.asRetriever()));
     
