@@ -7,8 +7,8 @@ const OpenAIEmbeddings = require('langchain/embeddings/openai').OpenAIEmbeddings
 
 // +jls+ 6-July-2023 makechain.ts and pinecone-client.ts 
 // +jls+ 6-July-2023 from gptPdfLangChainPinecone
-const makeChain = require('./utils/makechain');
-const pinecone = require('./utils/pinecone-client');
+const makeChain = require('makechain');
+const pinecone = require('pinecone-client');
 const PineconeStore = require('langchain/vectorstores/pinecone');
 
 const {Configuration, OpenAIApi} = require('openai');
