@@ -12,7 +12,7 @@ const OpenAI = require('langchain/llms/openai');
 const PineconeStore = require('langchain/vectorstores/pinecone');
 const ConversationalRetrievalQAChain = require('langchain/chains');
 // const makeChain = require('./makechain');
-const pinecone = require('./pinecone-client');
+// const pinecone = require('./pinecone-client');
 
 const {Configuration, OpenAIApi} = require('openai');
 const express = require('express');
@@ -72,19 +72,22 @@ const makeChain = (vectorstore) => {
 
 // +js+ 6-July-2023 comment out -- change homemade to LangChain
 // define initPinecone function to return pinecone
-// async function initPinecone() {
-//   try {
-//     const pinecone = new PineconeClient();
-//     await pinecone.init({
-//         environment: PINECONE_ENVIRONMENT,
-//         apiKey: PINECONE_API_KEY
-//     });
-//     return pinecone;
-//   } catch (error) {
-//     console.log('error', error);
-//     throw new Error('Failed to initialize Pinecone Client');
-//   }
-// }
+async function initPinecone() {
+  try {
+    const pinecone = new PineconeClient();
+    await pinecone.init({
+        environment: PINECONE_ENVIRONMENT,
+        apiKey: PINECONE_API_KEY
+    });
+    return pinecone;
+  } catch (error) {
+    console.log('error', error);
+    throw new Error('Failed to initialize Pinecone Client');
+  }
+}
+
+// +jls+ 6-July-2023 not sure where or when to invoke this:
+const pinecone = await initPinecone();
 
 // +js+ 6-July-2023 comment out -- change homemade to LangChain
 // async function queryPinecone(uniPrompt, nameSpace) {
