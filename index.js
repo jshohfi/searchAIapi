@@ -51,7 +51,7 @@ If the question is not related to the context, politely respond that you are tun
 Question: {question}
 Helpful answer in markdown:`;
 
-const makeChain = (vectorstore: PineconeStore) => {
+const makeChain = (vectorstore) => {
   const model = new OpenAI({
     temperature: 0, 
     modelName: 'gpt-4',
