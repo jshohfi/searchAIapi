@@ -86,9 +86,6 @@ async function initPinecone() {
   }
 }
 
-// +jls+ 6-July-2023 not sure where or when to invoke this:
-const pinecone = await initPinecone();
-
 // +js+ 6-July-2023 comment out -- change homemade to LangChain
 // async function queryPinecone(uniPrompt, nameSpace) {
 //     const pinecone = await initPinecone();
@@ -116,6 +113,10 @@ app.get('/', async (req, res) => {
 
 app.post('/', async (req, res) => {
   try {
+
+    // +jls+ 6-July-2023 not sure where or when to invoke this:
+    const pinecone = await initPinecone();
+    
     // +jls+ 30-June-2023 searchAI individual bots optionally specify a model ID,
     //    else searchAI/bot-io.services.ts sets default model to gpt-3.5-turbo
     // +jls+ 4-July-2023 they also optional specify temperature (0 to 2, def .3),
