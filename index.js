@@ -129,16 +129,40 @@ app.post('/', async (req, res) => {
       const sanitizedQuestion = prompt_text.trim().replaceAll('\n', ' ');
       console.log('**sanitizedQuestion=', sanitizedQuestion);
       console.log('**historyQA=', historyQA);
-      //create chain
-      const chain = makeChain(vectorStore);
-      //Ask a question using chat history
-      const response = await chain.call({
-        question: sanitizedQuestion,
-        chat_history: historyQA || [],
-      });
-      botResponse = response;
-      console.log('**botResponse=', botResponse);
-      console.log('**response.sourceDocuments[0].metadata.source=', response.sourceDocuments[0].metadata.source);
+
+      try {
+        const index = pinecone.Index(PINECONE_INDEX_NAME);
+    
+        /* create vectorStore*/
+        const vectorStore = await PineconeStore.fromExistingIndex(
+          new OpenAIEmbeddings({}),
+          {
+            pineconeIndex: index,
+            textKey: 'text',
+            namespace: PINECONE_NAME_SPACE,
+          },
+        );
+    
+        // console.log("vectorStore.asRetriever()=" + JSON.stringify(vectorStore.asRetriever()));
+    
+        //create chain
+        const chain = makeChain(vectorStore);
+        //Ask a question using chat history
+        const response = await chain.call({
+          question: sanitizedQuestion,
+          chat_history: historyQA || [],
+        });
+        botResponse = response;
+        console.log('**botResponse=', botResponse);
+        console.log('**response.sourceDocuments[0].metadata.source=', response.sourceDocuments[0].metadata.source);
+    
+        res.status(200).json(response);
+    
+      } catch (error) {
+        console.log('error', error);
+        res.status(500).json({ error: error.message || 'Something went wrong' });
+      }
+
     }
 
     // +jls+ 17-June-2023 only do this below if no custom docs
