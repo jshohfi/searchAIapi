@@ -1,4 +1,6 @@
-import { PineconeClient } from '@pinecone-database/pinecone';
+// +jls+ 6-July-2023 imports in makechain.ts and pinecone-client.ts 
+const PineconeClient = require('@pinecone-database/pinecone').PineconeClient;
+// import { PineconeClient } from '@pinecone-database/pinecone';
 
 if (!process.env.PINECONE_ENVIRONMENT || !process.env.PINECONE_API_KEY) {
   throw new Error('Pinecone environment or api key vars missing');

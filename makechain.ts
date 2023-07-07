@@ -1,6 +1,10 @@
-import { OpenAI } from 'langchain/llms/openai';
+// +jls+ 6-July-2023 imports in makechain.ts and pinecone-client.ts 
+const OpenAI = require('langchain/llms/openai');
+// import { OpenAI } from 'langchain/llms/openai';
+// const PineconeStore = require('langchain/vectorstores/pinecone');
 import { PineconeStore } from 'langchain/vectorstores/pinecone';
-import { ConversationalRetrievalQAChain } from 'langchain/chains';
+const ConversationalRetrievalQAChain = require('langchain/chains');
+// import { ConversationalRetrievalQAChain } from 'langchain/chains';
 
 const CONDENSE_PROMPT = `Given the following conversation and a follow up question, rephrase the follow up question to be a standalone question.
 
