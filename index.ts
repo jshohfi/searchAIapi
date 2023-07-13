@@ -132,13 +132,14 @@ app.post('/', async (req: any, res: any) => {
 
         const index = pinecone.Index(process.env['PINECONE_INDEX_NAME']!);
 
-        /* create vectorstore*/
+        // +jls+ 13-July-2023 change hardcoded to posted namespace ID
+        // +jls+  it was hardcoded as 'Higher Education Act of 1965'
         const vectorStore = await PineconeStore.fromExistingIndex(
             new OpenAIEmbeddings({}),
             {
             pineconeIndex: index,
             textKey: 'text',
-            namespace: 'Higher Education Act of 1965',
+            namespace: namespace,
             },
         );
         // const vectorStore = await PineconeStore.fromExistingIndex(
